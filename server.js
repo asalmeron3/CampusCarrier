@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3002;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Serve up static assets
-app.use(express.static(path.join(__dirname, '/build')));
+// app.use(express.static(path.join(__dirname, '/build')));
 // Add routes, both API and view
 app.use('/',routes);
 // app.use('/auth', routes);

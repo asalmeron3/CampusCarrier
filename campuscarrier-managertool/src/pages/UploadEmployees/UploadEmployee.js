@@ -86,32 +86,37 @@ class UploadEmployees extends Component {
         })
         
       };
-    handleUserConfirm = ()=> {
+    handleUserConfirm = (employeeClicked, e)=> {
 
-        API.inOutCancelConfirm("confirmShift", this.state.empID)
+        !employeeClicked.shiftConfirmed 
+        ? API.inOutCancelConfirm("confirmShift", employeeClicked._id)
             .then()
             .catch(err => console.log(err))
+
+        : !employeeClicked.cancelled
+        ? API.inOutCancelConfirm("cancelled", employeeClicked._id)
+            .then()
+            .catch(err => console.log(err))
+        : null
+        this.runquery()
     }
-    handleUserClockIn = ()=> {
+    handleUserClockIn = (employeeClicked, e)=> {
         let time = moment().format('llll')
-        API.recordTime("checkin", this.state.empID, {time: time})
-            .then()
-            .catch(err => console.log(err))
 
-    }
-    handleUserClockOut = ()=> {
-        let time = moment().format('llll')
-        API.recordTime("checkout", this.state.empID, {time: time})
+        employeeClicked.clockedIn === undefined
+        ? API.recordTime("checkin", employeeClicked._id, {time: time})
             .then()
             .catch(err => console.log(err))
-    }
-    handleUserCancel = ()=> {
-
-        API.inOutCancelConfirm("cancelled", this.state.empID)
+        : employeeClicked.clockedOut === undefined
+        ? API.recordTime("checkout", employeeClicked._id, {time: time})
             .then()
             .catch(err => console.log(err))
+        : null
+        this.runquery()
     }
+   
     handleClose = () => {
+        this.runquery()
         this.setState({
             modalOpen:false,
             name:"",
@@ -120,10 +125,11 @@ class UploadEmployees extends Component {
             empID:""
         })
         
+
     }
     handleNoteChange = (e) =>{
         const {target:{name,value}} = e;
-        this.setState({[name]:value});
+        this.setState({[name]:value}); 
     };
     addNote = () =>{
         this.setState({notes:""})
@@ -142,7 +148,6 @@ class UploadEmployees extends Component {
             .then (res => this.setState({employeesForToday: res.data}))
             .catch(err => console.log(err))
         
-            console.log(this.state.dateToQuery)
     }
     addEmpToDB = () => {
 
@@ -158,12 +163,13 @@ class UploadEmployees extends Component {
         
     }
     handleFormModalClose = () => {
-        this.setState({
+         this.setState({
             name: "",
             phone: "",
             email: "",
             isFormModalOpen: false 
         })
+       
     }
     openFormModal = () => {
         this.setState({isFormModalOpen: true})
@@ -190,7 +196,7 @@ class UploadEmployees extends Component {
         return (
             <Container style={{"margin":"50px"}}>
                 <Segment.Group>
-                <Segment style={{"background-color":"#114C75"}}>
+                <Segment style={{"background-color":"#114C75"}} textAlign='center'>
                     
                     <Button style={{"margin":"10px"}} inverted>
                         <Dropdown  placeholder = "Select a Date" options = {dates} floating onChange = {this.dateSelection}/>
@@ -198,7 +204,7 @@ class UploadEmployees extends Component {
                     <Button style={{"margin":"10px"}} inverted>
                         <Dropdown  placeholder = "Select a Shift" options = {shiftTimes} floating onChange = {this.shiftSelection}/>
                     </Button>
-                    <Button inverted style={{"margin":"10px"}} onClick = {this.runquery}> Find / Refresh</Button>
+                    <Button inverted style={{"margin":"10px"}} onClick = {this.runquery}> Find Employees For This Date</Button>
                     <Button inverted style={{"margin":"10px"}} onClick = {this.openFormModal}> Add Impromptu Employee/ Shift</Button>
                     <Button inverted style={{"margin":"10px"}}>
                         <CustomName handleFiles={this.handleFiles} fileTypes={'.csv'}/>
@@ -207,14 +213,15 @@ class UploadEmployees extends Component {
 
                 </Segment>
 
-                <Segment centered>
-                <Card.Group centered >
+                <Segment >
+                <Card.Group className = "centered">
 
                     {this.state.employeesForToday.map( oneEmp => {
                         let cardClicked = this.showEmployeeModal.bind(this,oneEmp)
+                        let userIconClicked = this.handleUserConfirm.bind(this,oneEmp)
+                        let timeIconClicked = this.handleUserClockIn.bind(this,oneEmp)
                         return (
-                            <Card color = {oneEmp.cancelled ? "red" : oneEmp.shiftConfirmed ? "green": null} 
-                                onClick = {cardClicked}
+                            <Card color = {oneEmp.cancelled ? "red" : oneEmp.shiftConfirmed ? "green": null}
                                 key = {oneEmp._id}
                             >
                             <Card.Content>
@@ -228,6 +235,50 @@ class UploadEmployees extends Component {
                                 <br/> {oneEmp.clockedOut ? "Clocked Out: " + oneEmp.clockedOut : null}
                                 </Card.Description>
                             </Card.Content>
+                            <Card.Content extra>
+                            <Form style = {{"float":"left"}} as ="a" href= {"tel:" + oneEmp.phone}>
+                                <Icon circular link size="large" name = "phone"/>
+                            </Form>
+                                <Icon.Group size='large' >
+                                    <Icon link circular name='user' 
+                                        style = {{"background-color":"lightgrey"}} 
+                                        onClick={userIconClicked}
+                                    />
+
+                                    <Icon corner name=
+                                        {oneEmp.shiftConfirmed && !oneEmp.cancelled
+                                            ? 'check'
+                                            : oneEmp.cancelled ? 'dont'
+                                            :''
+                                        }
+                                    />
+                                </Icon.Group>
+
+                                <Icon.Group size='large' >
+                                    <Icon link circular name='clock' 
+                                        style = {{"background-color":"lightgrey"}} 
+                                        onClick={timeIconClicked}  
+                                    />
+                                    <Icon corner name= 
+                                        {oneEmp.clockedIn != undefined && !oneEmp.clockedOut ===undefined
+                                            ? 'hourglass start'
+                                            : oneEmp.clockedOut != undefined ? 'check' 
+                                            : ''
+                                        }
+                                    />
+
+                                </Icon.Group>
+
+                                <Icon.Group size='large' >
+                                    <Icon link circular name='book'
+                                        style = {{"background-color":"lightgrey"}} 
+                                        onClick={cardClicked}  
+                                    />
+                                    <Icon corner name='pencil' />
+                                </Icon.Group>
+                                
+                            </Card.Content>
+
                             </Card>
                         )
                     })}

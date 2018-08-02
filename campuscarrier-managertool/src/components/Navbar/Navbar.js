@@ -8,7 +8,7 @@ var NavComponent = (props) =>
       <Menu.Item style = {{"margin":"auto"}}>
 
         <Icon.Group size='huge'> 
-          <Image src = "%PUBLIC_URL%/CampusCarriersLogo.png" size ="small" href ="/" />
+          <Image src = "CampusCarriersLogo.PNG" size ="small" href ="/" />
         </Icon.Group>
 
       </Menu.Item>

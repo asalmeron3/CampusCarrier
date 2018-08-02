@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '/build')));
 // Add routes, both API and view
 app.use('/',routes);
 // app.use('/auth', routes);
-app.use('/', proxy({target: 'localhost:3002', changeOrigin: true}));
+// app.use('/', proxy({target: 'localhost:3002', changeOrigin: true}));
 //-------------------------------------------------------//
 
 //------------ Set up promises with mongoose -----------//

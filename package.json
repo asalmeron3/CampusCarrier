@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"node server.js\" \"npm run client\"",
     "client": "node scripts/start-client.js",
-    "postinstall": "cd client && npm install && npm run build",
+    "postinstall": "cd campuscarrier-managertool && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "installDeps": "yarn && cd campuscarrier-managertool && yarn"
   },

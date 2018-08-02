@@ -1,0 +1,26 @@
+{
+  "name": "campuscarriers",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/asalmeron3/CampusCarrier.git",
+  "scripts": {
+    "start": "concurrently \"node server.js\" \"npm run client\"",
+    "client": "node scripts/start-client.js",
+    "postinstall": "cd client && npm install && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "installDeps": "yarn && cd campuscarrier-managertool && yarn"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "1.18.2",
+    "concurrently": "^3.5.0",
+    "express": "4.16.2",
+    "http-proxy-middleware": "^0.18.0",
+    "mongoose": "^5.2.5",
+    "morgan": "^1.9.0",
+    "nodemailer": "^4.6.7",
+    "nodemon": "^1.17.5"
+  },
+  "author": "Arturo Salmeron <asalmeron3@gatech.edu>",
+  "license": "MIT"
+}

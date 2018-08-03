@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 //------Pages to render ---------//
 import UploadPage from "./pages/UploadEmployees/UploadEmployee"
+import Reports from "./pages/Reports/Reports"
+
 // -----------------------------//
 
 // ---Components for all pages ---//
@@ -23,6 +25,7 @@ class App extends Component {
 
             <Switch>
               <Route exact path = "/" component = {UploadPage} />
+              <Route exact path = "/reports" component = {Reports} />
             </Switch>
 
             </div>

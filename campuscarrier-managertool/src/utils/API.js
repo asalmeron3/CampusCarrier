@@ -30,5 +30,11 @@ export default {
     },
     addEmpToDB: (empObj) => {
         return axios.post("/api/employee/create", empObj)
+    },
+    getAllEmp: () => {
+        return axios.get("/api/employee/all")
+    },
+    getEmpData: (name) => {
+        return axios.get("/api/employee/report/"+ name)
     }
 }

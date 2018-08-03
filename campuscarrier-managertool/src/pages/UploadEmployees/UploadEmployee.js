@@ -166,17 +166,28 @@ class UploadEmployees extends Component {
         
     }
     addEmpToDB = () => {
-        this.state.dateToQuery !== "" && this.state.shiftTime !== ""
-        ? API.makeEmpAndShift({
-            date: this.state.dateToQuery,
-            employeeName: this.state.name,
-            phone: this.state.phone,
-            email: this.state.email,
-            shift: this.state.shiftTime
+        let query = {
+            date:this.state.dateToQuery,
+            shift:this.state.shiftTime,
+            employeeName:this.state.name
+        }
+        API.queryForDate(query)
+            .then (res => {
+                res.data.length === 0
+                ? API.makeEmpAndShift({
+                    date: this.state.dateToQuery,
+                    employeeName: this.state.name,
+                    phone: this.state.phone,
+                    email: this.state.email,
+                    shift: this.state.shiftTime
+                    })
+                    .then()
+                    .catch(err => console.log(err))
+                : null
             })
-            .then()
             .catch(err => console.log(err))
-        : null
+
+         
 
         this.state.name !== ""
         ? API.searchEmpDB({name:this.state.name})

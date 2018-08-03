@@ -24,7 +24,7 @@ var EmployeeModal =(props) =>
     <br/><br/>
 
     <Button onClick = {props.addNote} > Add Note For Employee </Button>
-
+    <Button as="a" href = {"/api/employee/report/" + props.modalName} target = "_blank"> Full Report </Button>
     </Modal.Description>
 
   </Modal.Content>

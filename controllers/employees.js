@@ -39,5 +39,28 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
       
+  },
+
+  report: (req, res) => {
+    let EmployeeData = {}
+    let nospaces = req.params.name.replace(/%20/g," ")
+    let name = nospaces.replace(/&#39;/g,"'")
+    db.Employee
+      .find({name: name})
+      .then(response => {
+        EmployeeData.Employee = response
+
+        db.EmpAndShifts
+          .find({employeeName : name})
+          .then( response => {
+            EmployeeData.Shifts = response
+            res.json(EmployeeData)
+          })
+          .catch(err => res.status(422).json(err))
+      } )
+      .catch(err => res.status(422).json(err))
+
+
+    
   }
 };

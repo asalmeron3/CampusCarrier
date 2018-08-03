@@ -41,9 +41,6 @@ var mongoose = require("mongoose");
         },
         clockedOut: {
             type: String
-        },
-        notes:{
-            type:[String]
         }
 
     });

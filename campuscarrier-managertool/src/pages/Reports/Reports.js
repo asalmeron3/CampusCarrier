@@ -45,7 +45,7 @@ class Report extends Component {
                                     let clickForReport = this.getAllEmpData.bind(this,oneEmp)
                                     return (
                                         <Grid.Row>
-                                        <Button fluid onClick = {clickForReport} style={{"background-color":"#114C75","color":"white", "margin":"5px"}}> {oneEmp.name} </Button>
+                                            <Button  onClick = {clickForReport} style={{"background-color":"#114C75","color":"white", "margin":"5px", "width":"100%"}}> {oneEmp.name} </Button>
                                         </Grid.Row>
                                     )
                                 }
@@ -58,7 +58,7 @@ class Report extends Component {
                                 ? <Card fluid>
                                     <Card.Content header={this.state.cardData.Employee[0].name} />
                                     <Card.Content >
-                                        <Table basic='very' celled padded>
+                                        <Table basic='very' celled padded unstackable>
                                             <Table.Header>
                                                 <Table.Row>
                                                     <Table.HeaderCell>Date</Table.HeaderCell>

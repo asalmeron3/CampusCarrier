@@ -26,9 +26,18 @@ module.exports = {
   },
 
   addNote: (req, res) =>{
+    let name = req.params.name.replace(/%20/g," ")
     db.Employee
-      .findOneAndUpdate({_id: req.params.id},{$push: {notes:req.body.note}}, { new: true })
+      .findOneAndUpdate({name: name},{$push: {notes:req.body.note}}, { new: true })
       .then(employeeWithNotes => res.json(employeeWithNotes))
       .catch(err => res.status(422).json(err))
+  },
+
+  find: function(req, res) {
+    db.Employee
+      .find(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+      
   }
 };

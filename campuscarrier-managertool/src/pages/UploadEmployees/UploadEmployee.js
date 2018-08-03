@@ -49,7 +49,7 @@ class UploadEmployees extends Component {
     addShiftToDB = (eachLine) => {
 
         let EmpAndShift
-
+        let employee
         eachLine.search(":00") >=0 || eachLine.search(":30") >=0
             ? this.setState({currentShift : eachLine.split(",")[0].split(" - ")[0] + " - " + eachLine.split(",")[0].split(" - ")[1] }) 
             : eachLine.search("@") >=0
@@ -67,7 +67,23 @@ class UploadEmployees extends Component {
             .then()
             .catch(err => console.log(err))
         : null
-        
+        EmpAndShift != undefined
+        ? API.searchEmpDB({name:EmpAndShift.employeeName})
+            .then(res => {
+                console.log(res)
+                res.data.length === 0
+                ? API.addEmpToDB({
+                        name:EmpAndShift.employeeName,
+                        phone: EmpAndShift.phone,
+                        email: EmpAndShift.email
+                    })
+                    .then()
+                    .catch(err => console.log(err))
+                :null
+                }
+            )
+            .catch(err => console.log(err))
+        : null
     }
     dateSelection = (e, { value }) => {
         this.setState({ dateToQuery: value })
@@ -133,7 +149,7 @@ class UploadEmployees extends Component {
     };
     addNote = () =>{
         this.setState({notes:""})
-        API.postNote(this.state.empID, {note:this.state.notes})
+        API.postNote(this.state.name, {note:this.state.notes})
             .then()
             .catch(err => console.log(err))
     }
@@ -150,16 +166,33 @@ class UploadEmployees extends Component {
         
     }
     addEmpToDB = () => {
-
-        API.makeEmpAndShift({
+        this.state.dateToQuery !== "" && this.state.shiftTime !== ""
+        ? API.makeEmpAndShift({
             date: this.state.dateToQuery,
             employeeName: this.state.name,
             phone: this.state.phone,
             email: this.state.email,
             shift: this.state.shiftTime
-        })
+            })
             .then()
             .catch(err => console.log(err))
+        : null
+
+        this.state.name !== ""
+        ? API.searchEmpDB({name:this.state.name})
+            .then(res => 
+                res.data.length === 0
+                ? API.addEmpToDB({
+                        name:this.state.name,
+                        phone: this.state.phone,
+                        email: this.state.email
+                    })
+                    .then()
+                    .catch(err => console.log(err))
+                    :null
+            )
+            .catch(err => console.log(err))
+        : null
         
     }
     handleFormModalClose = () => {
@@ -183,7 +216,11 @@ class UploadEmployees extends Component {
         {text: 'Friday August 17, 2018',key:  'Friday August 17, 2018', value:'Friday August 17, 2018'}, 
         {text: 'Saturday August 18, 2018',key:  'Saturday August 18, 2018', value:'Saturday August 18, 2018'}, 
         {text: 'Sunday August 19, 2018',key:  'Sunday August 19, 2018', value:'Sunday August 19, 2018'}, 
-        {text: 'Monday August 20, 2018',key:  'Monday August 20, 2018', value:'Monday August 20, 2018'}
+        {text: 'Monday August 20, 2018',key:  'Monday August 20, 2018', value:'Monday August 20, 2018'},
+        {text: '** Friday August 3, 2018',key:  'Friday August 3, 2018', value:'Friday August 3, 2018'},
+        {text: '** Saturday August 4, 2018',key:  'Saturday August 4, 2018', value:'Saturday August 4, 2018'},
+        {text: '** Saturday August 11, 2018',key:  'Saturday August 11, 2018', value:'Saturday August 11, 2018'},
+        {text: '** Monday August 11, 2018',key:  'Monday August 11, 2018', value:'Monday August 11, 2018'}
         ];
         const shiftTimes  = [
             { text: "None", key: "none", value: ""},
@@ -260,9 +297,9 @@ class UploadEmployees extends Component {
                                         onClick={timeIconClicked}  
                                     />
                                     <Icon corner name= 
-                                        {oneEmp.clockedIn != undefined && !oneEmp.clockedOut ===undefined
+                                        {oneEmp.clockedIn !== undefined && !oneEmp.clockedOut ===undefined
                                             ? 'hourglass start'
-                                            : oneEmp.clockedOut != undefined ? 'check' 
+                                            : oneEmp.clockedOut !== undefined ? 'check' 
                                             : ''
                                         }
                                     />

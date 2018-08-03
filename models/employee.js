@@ -22,13 +22,9 @@ var mongoose = require("mongoose");
 			type: String,
 			required: true
 		},
-		notes: {
-			type: String,
-		},
-		shifts: [{
-			type: Schema.Types.ObjectId,
-			ref: "Shifts"
-		}]
+		notes:{
+            type:[String]
+        }
 		
 	});
 //-----------------------------------------------//

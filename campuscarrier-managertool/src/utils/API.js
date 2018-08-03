@@ -19,10 +19,16 @@ export default {
     inOutCancelConfirm: (endRoute, empID) => {
         return axios.post("/api/empAndShifts/" + endRoute + "/" + empID)
     },
-    postNote: (empID,noteObj) =>{
-        return axios.post("/api/empAndShifts/addnote/" + empID, noteObj)
+    postNote: (empName,noteObj) =>{
+        return axios.post("/api/employee/addnote/" + empName, noteObj)
     },
     recordTime: (endRoute, empID, time) => {
         return axios.post("/api/empAndShifts/" + endRoute + "/" + empID, time)
     },
+    searchEmpDB: (empObj) => {
+        return axios.post("/api/employee/find", empObj)
+    },
+    addEmpToDB: (empObj) => {
+        return axios.post("/api/employee/create", empObj)
+    }
 }

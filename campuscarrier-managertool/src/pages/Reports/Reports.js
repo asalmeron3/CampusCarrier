@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Container, Segment, Grid, Button, Card, Table, Header} from "semantic-ui-react";
 import API from "../../utils/API";
-
+import "./Reports.css"
 class Report extends Component {
 //     constructor() {
 //     super();
@@ -45,7 +45,7 @@ class Report extends Component {
                                     let clickForReport = this.getAllEmpData.bind(this,oneEmp)
                                     return (
                                         <Grid.Row>
-                                            <Button  onClick = {clickForReport} style={{"background-color":"#114C75","color":"white", "margin":"5px", "width":"100%"}}> {oneEmp.name} </Button>
+                                            <Button  onClick = {clickForReport} style={{"margin":"5px", "width":"100%"}}> {oneEmp.name} </Button>
                                         </Grid.Row>
                                     )
                                 }
@@ -57,10 +57,11 @@ class Report extends Component {
                                 this.state.cardData.length !==0 
                                 ? <Card fluid>
                                     <Card.Content header={this.state.cardData.Employee[0].name} />
+                                    
                                     <Card.Content >
-                                        <Table basic='very' celled padded unstackable>
+                                        <Table basic celled padded unstackable>
                                             <Table.Header>
-                                                <Table.Row>
+                                                <Table.Row active>
                                                     <Table.HeaderCell>Date</Table.HeaderCell>
                                                     <Table.HeaderCell>Shift</Table.HeaderCell>
                                                     <Table.HeaderCell>Description </Table.HeaderCell>
@@ -74,8 +75,8 @@ class Report extends Component {
                                                         <Table.Row>
 
                                                             
-                                                            <Table.Cell singleLine>{eachShift.date}</Table.Cell>
-                                                            <Table.Cell singleLine>{eachShift.shift}</Table.Cell>
+                                                            <Table.Cell>{eachShift.date}</Table.Cell>
+                                                            <Table.Cell>{eachShift.shift}</Table.Cell>
                                                             
                                                             <Table.Cell>
                                                                 {eachShift.shiftConfirmed ? "This shift was confirmed prior to shift date." : null}
@@ -91,6 +92,23 @@ class Report extends Component {
                                                     )   
                                                 }
                                             </Table.Body>
+                                            <Table.Footer fullWidth>
+                                                <Table.Row active>
+                                                    <Table.HeaderCell > <h4>Notes About Employee</h4></Table.HeaderCell>
+
+                                                    <Table.HeaderCell colSpan='2'>
+                                                    {
+                                                        this.state.cardData.Employee[0].notes.map(eachNote =>
+                                                            {
+                                                                return (<p> {eachNote}</p>) 
+                                                            }
+                                                            
+                                                        )
+                                                    }
+
+                                                    </Table.HeaderCell>
+                                                </Table.Row>
+                                            </Table.Footer>
                                         </Table>
                                     </Card.Content>
                                 </Card>

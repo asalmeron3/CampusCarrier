@@ -1,0 +1,9 @@
+.ui.button:not(:hover) {
+    color: white;
+    background:#114C75;
+  }
+  
+  /* .ui.button:hover {
+    background: #3E97CF;
+    color: #fff;
+  } */

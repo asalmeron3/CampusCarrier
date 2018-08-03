@@ -33,12 +33,12 @@ class Report extends Component {
             <Segment.Group>
 
                     <Segment style={{"background-color":"#114C75", "color":"white"}} textAlign='center'>
-                        <h2>Run a Report</h2>
+                        <h2>Employee Reports</h2>
                     </Segment>
 
                     <Segment > 
                         <Grid>
-                        <Grid.Row>
+                        <Grid.Row divided>
                         <Grid.Column width = {4}>
                             {this.state.allEmployees.map( oneEmp =>
                                 {
@@ -79,7 +79,7 @@ class Report extends Component {
                                                             <Table.Cell>{eachShift.shift}</Table.Cell>
                                                             
                                                             <Table.Cell>
-                                                                {eachShift.shiftConfirmed ? "This shift was confirmed prior to shift date." : null}
+                                                                {eachShift.shiftConfirmed ? "This shift was confirmed prior to shift date." :"This shift has not yet been confirmed."}
                                                                 <br/> {eachShift.cancelled ? "This shift was missed/cancelled."  : null}
                                                                 <br/> {eachShift.clockedIn ? "Clocked In: " + eachShift.clockedIn : null}
                                                                 <br/> {eachShift.clockedOut ? "Clocked Out: " + eachShift.clockedOut : null}
